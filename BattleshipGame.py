@@ -15,18 +15,18 @@ class BattleshipGame(object):
         self.turn = 0
         self.rule_move_until_miss = rule_move_until_miss
 
-    def move(self, x: int, y: int) -> (BSMoveResult, int):
+    def move(self, x: int, y: int) -> BSMoveResult:
         if self.turn == 2:
             raise Exception("Cannot make move because game has finished already")
-        result = self.boards[self.turn].move((x, y))
+        result = self.boards[not self.turn].move((x, y))
         if result == BSMoveResult.MISS:
             self.turn = not self.turn
-        if result in [BSMoveResult.HIT, BSMoveResult.HIT_AND_SUNK]:
+        elif result in [BSMoveResult.HIT, BSMoveResult.HIT_AND_SUNK]:
             if not self.rule_move_until_miss:
                 self.turn = not self.turn
-        if result == BSMoveResult.END:
+        elif result == BSMoveResult.END:
             self.turn = 2
-        return result, self.turn
+        return result
 
     def getactiveplayer(self):
         # returns either the index of the active player or 2 if the game is over
@@ -40,12 +40,19 @@ class BattleshipGame(object):
 
 
 if __name__ == "__main__":
-    game = BattleshipGame(12, ships0, ships1)
-    result, player_to_move = game.move(0, 0)
-    result, player_to_move = game.move(1, 1)
-    result, player_to_move = game.move(1, 2)
-    result, player_to_move = game.move(2, 1)
-    result, player_to_move = game.move(3, 3)
-    result, player_to_move = game.move(3, 4)
-    result, player_to_move = game.move(3, 5)
+    game = BattleshipGame(12, ships0, ships1, rule_move_until_miss=False)
     game.displaygamestate()
+    player0moves = [(1, 1), (2, 1), (3, 1), (3, 3), (3, 4), (5, 5), (24, 24)]
+    player1moves = [(1, 1), (2, 1), (3, 3), (3, 4), (3, 5), (3, 5)]
+    playermoves = [player0moves, player1moves]
+    result = None
+    while True:
+        currentplayer = game.getactiveplayer()
+        if currentplayer == 2:
+            print("Game has ended")
+            game.displaygamestate()
+            break
+        else:
+            move = playermoves[currentplayer].pop()
+            print(f"Current Player: {currentplayer}. Move: {move}")
+            game.move(*move)
