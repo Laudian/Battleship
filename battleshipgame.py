@@ -1,11 +1,5 @@
 from battleshipboard import *
 
-ships0 = [Ship(1, 1, Orientation.HORIZONTAL, 2),
-          Ship(3, 3, Orientation.VERTICAL, 3)]
-
-ships1 = [Ship(1, 1, Orientation.HORIZONTAL, 3),
-          Ship(3, 3, Orientation.VERTICAL, 2)]
-
 
 class BattleshipGame(object):
     def __init__(self, size, ships0, ships1, rule_move_until_miss: bool = True):
@@ -40,6 +34,12 @@ class BattleshipGame(object):
 
 
 if __name__ == "__main__":
+    ships0 = [Ship(1, 1, Orientation.HORIZONTAL, 2),
+              Ship(3, 3, Orientation.VERTICAL, 3)]
+
+    ships1 = [Ship(1, 1, Orientation.HORIZONTAL, 3),
+              Ship(3, 3, Orientation.VERTICAL, 2)]
+
     game = BattleshipGame(12, ships0, ships1, rule_move_until_miss=False)
     game.displaygamestate()
     player0moves = [(1, 1), (2, 1), (3, 1), (3, 3), (3, 4), (5, 5), (24, 24)]
